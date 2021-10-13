@@ -6,10 +6,11 @@ var logger = require('morgan');
 var hbs= require('express-handlebars')
 var fileUpload =require('express-fileUpload');
 var db= require('./config/connection')
-
+var session=require('express-session')
 
 var userRouter = require('./routes/user');
 var adminRouter = require('./routes/admin');
+const { createSecretKey } = require('crypto');
 
 
 var app = express();
@@ -25,6 +26,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(fileUpload()) 
+app.use(session({secret:'key',cookie:{maxAge:600000}}))
 
 db.connect((err)=>{
   if(err)  console.log("Error in the connectivity" + err);
